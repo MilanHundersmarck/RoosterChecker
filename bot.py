@@ -5,6 +5,7 @@ import requests
 from ics import Calendar
 from datetime import datetime, timedelta
 import os
+from zoneinfo import ZoneInfo
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -12,6 +13,7 @@ TOKEN = os.getenv("TOKEN")
 CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
 WEBCAL_URL = os.getenv("WEBCAL_URL")
 DATA_FILE = "events.json"
+LOCAL_TZ = ZoneInfo("Europe/Amsterdam")
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
@@ -85,8 +87,8 @@ def format_changes(added, removed, changed):
 
 
 def format_time_range(event):
-    start = datetime.fromisoformat(event['start']).strftime('%H:%M')
-    end = datetime.fromisoformat(event['end']).strftime('%H:%M')
+    start = datetime.fromisoformat(event['start']).astimezone(LOCAL_TZ).strftime('%H:%M')
+    end = datetime.fromisoformat(event['end']).astimezone(LOCAL_TZ).strftime('%H:%M')
     return f"{start} - {end}"
 
 async def daily_check():
