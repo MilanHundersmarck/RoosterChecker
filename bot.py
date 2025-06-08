@@ -107,7 +107,7 @@ async def daily_check():
         except Exception as e:
             await channel.send(f"Error during calendar check: {e}")
 
-        await asyncio.sleep(1 * 60)  # wait 24h
+        await asyncio.sleep(int(os.getenv("INTERVAL")) * 60)  # wait 24h
 
 @client.event
 async def on_ready():
